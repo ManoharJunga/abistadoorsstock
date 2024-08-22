@@ -1,10 +1,9 @@
-
 import express from 'express';
-import { createDoor, getDoors } from '../controllers/doorController.js';
+import { createDoors, getDoors } from '../controllers/doorController.js';
 
 const router = express.Router();
 
-router.post('/', createDoor);
+router.post('/', createDoors);
 router.get('/', getDoors);
 
 export default router;
