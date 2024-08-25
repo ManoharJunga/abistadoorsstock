@@ -19,6 +19,30 @@ export const createDoors = async (req, res) => {
     }
 };
 
+
+// Update door stock quantity
+export const updateDoorStock = async (req, res) => {
+    const { id } = req.params; // Get the door ID from request parameters
+    const { quantity } = req.body; // Get the quantity to add from request body
+
+    try {
+        // Find the door by ID and increment the quantity
+        const updatedDoor = await Door.findByIdAndUpdate(
+            id,
+            { $inc: { quantity: quantity } }, // Increment the quantity by the specified amount
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedDoor) {
+            return res.status(404).json({ message: 'Door not found' });
+        }
+
+        res.status(200).json(updatedDoor); // Return the updated door
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 // Get all doors
 export const getDoors = async (req, res) => {
     try {
@@ -50,5 +74,30 @@ export const getDoorsByType = async (req, res) => {
         res.status(200).json(doors);
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+};
+
+
+// Update a door
+export const updateDoor = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updatedDoor = await Door.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedDoor) return res.status(404).json({ message: 'Door not found' });
+        res.json(updatedDoor);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Delete a door
+export const deleteDoor = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletedDoor = await Door.findByIdAndDelete(id);
+        if (!deletedDoor) return res.status(404).json({ message: 'Door not found' });
+        res.json({ message: 'Door deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
